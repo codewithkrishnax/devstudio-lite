@@ -1,0 +1,132 @@
+<div class="app-root" [class.dark]="isDark()" [class.light]="!isDark()">
+
+  <!-- LEFT SIDEBAR -->
+  <aside class="sidebar" [class.collapsed]="collapsed()">
+
+    <!-- Brand -->
+    <div class="brand" (click)="toggleCollapse()">
+      <div class="brand-icon">
+        <i *ngIf="!collapsed()" class="fa fa-code"></i>
+        <i *ngIf="collapsed()" class="fas fa-chevron-right " ></i>
+      </div>
+      <span class="brand-name" *ngIf="!collapsed()">DevStudio Lite</span>
+      <button class="collapse-btn" [title]="collapsed() ? 'Expand' : 'Collapse'">
+        <i class="fas" [class.fa-chevron-left]="!collapsed()"></i>
+      </button>
+    </div>
+
+    <!-- Tool List -->
+    <nav class="nav-list">
+
+      <!-- Loading tools -->
+      <div class="nav-loading" *ngIf="loadingTools()">
+        <div class="skeleton" *ngFor="let i of [1,2,3,4]"></div>
+      </div>
+
+      <!-- Error -->
+      <!-- <div class="nav-error" *ngIf="loadError() && !collapsed()">
+        <i class="fas fa-circle-exclamation"></i>
+        <span>{{ loadError() }}</span>
+      </div>
+      <div class="nav-error-icon" *ngIf="loadError() && collapsed()" title="Failed to load tools">
+        <i class="fas fa-circle-exclamation"></i>
+      </div> -->
+
+      <!-- Tools -->
+      <button
+        *ngFor="let tool of tools()"
+        class="nav-item"
+        [class.active]="selectedTool()?.title === tool.title"
+        (click)="selectTool(tool)"
+        [title]="collapsed() ? tool.title : ''"
+      >
+        <span class="nav-icon">
+          <i [class]="tool.icon"></i>
+        </span>
+        <span class="nav-label" *ngIf="!collapsed()">{{ tool.title }}</span>
+        <span class="active-dot" *ngIf="selectedTool()?.title === tool.title && !collapsed()"></span>
+      </button>
+
+    </nav>
+
+    <!-- Footer: Theme Toggle -->
+    <!-- <div class="sidebar-footer">
+      <button class="theme-toggle" (click)="toggleTheme()" [title]="isDark() ? 'Switch to Light' : 'Switch to Dark'">
+        <i class="fas" [class.fa-sun]="isDark()" [class.fa-moon]="!isDark()"></i>
+        <span *ngIf="!collapsed()">{{ isDark() ? 'Light Mode' : 'Dark Mode' }}</span>
+      </button>
+    </div> -->
+  </aside>
+
+ <!-- MAIN CONTENT -->
+  <main class="main">
+    
+
+    <div class="main-topbar" style="--wails-draggable: drag">
+      <div class="brand-icon" style="visibility: hidden;">
+        <i class="fa fa-code"></i>
+      </div>
+      <div class="win-controls">
+        <button (click)="minimize()" class="win-btn minimize" title="Minimize">
+          <i class="fas fa-minus"></i>
+        </button>
+        <button (click)="maximize()" class="win-btn maximize" title="Maximize">
+         <i
+  [class]="isMax() ? 'fa-regular fa-clone' : 'fa-regular fa-square'">
+</i>
+        </button>
+        <button (click)="close()" class="win-btn close" title="Close">
+          <i class="fas fa-xmark"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- content area below topbar -->
+    <div class="content-area">
+
+      <div class="welcome" *ngIf="!selectedTool() && !loadingTools()">
+        <div class="welcome-icon" [class.bg-white]="loadError()">
+          <i  [class]="loadError() ? 'fas fa-circle-exclamation' :'fa fa-code'"></i>
+        </div>
+        <div class="nav-error" *ngIf="loadError()">
+        <!-- <i class="fas fa-circle-exclamation"></i> -->
+         <button (click)="reload()" title="Reload">
+          <i class="fas fa-sync-alt"></i>
+         </button>
+         <hr>
+        <h4>{{ loadError() }}</h4>
+      </div>
+        <div *ngIf="!loadError()">
+          <h2>Select a tool</h2>
+        <p>Choose a tool from the left panel to get started.</p>
+        <div class="welcome-chips">
+          <button *ngFor="let tool of tools()" class="chip" (click)="selectTool(tool)">
+            <i [class]="tool.icon"></i>
+            {{ tool.title }}
+          </button>
+        </div>
+        </div>
+      </div>
+
+      <div class="loader" *ngIf="iframeLoading() && selectedTool()">
+        <div class="spinner"></div>
+        <span>Loading {{ selectedTool()?.title }}…</span>
+      </div>
+
+      <iframe
+        *ngIf="selectedTool() && safeUrl()"
+        [src]="safeUrl()!"
+        class="tool-frame"
+        [class.hidden]="iframeLoading()"
+        (load)="onIframeLoad()"
+        allow="fullscreen; clipboard-read; clipboard-write; camera; microphone"
+        sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-modals allow-downloads"
+        referrerpolicy="no-referrer"
+        frameborder="0"
+      ></iframe>
+
+    </div>
+
+  </main>
+</div>
+

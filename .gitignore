@@ -1,0 +1,30 @@
+
+
+
+
+# Node
+node_modules/
+npm-debug.log
+
+# Build output
+bin/
+dist/
+frontend/dist/
+build/bin
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Windows binaries
+*.exe
+*.msix
+*.appx
+*.zip

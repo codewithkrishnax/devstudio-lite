@@ -1,0 +1,23 @@
+{
+  "$schema": "https://wails.io/schemas/config.v2.json",
+  "name": "DevStudio Lite",
+  "outputfilename": "DevStudio Lite",
+
+  "frontend:install": "npm install",
+  "frontend:build": "npm run build",
+  "frontend:dev:watcher": "npm start",
+  "frontend:dev:serverUrl": "http://localhost:4200",
+
+  "author": {
+    "name": "Krishna Kumar S",
+    "email": "codewithkrishna.dev@gmail.com"
+  },
+
+  "info": {
+    "productName": "DevStudio Lite",
+    "productVersion": "1.0.0",
+    "companyName": "Code With Krishna",
+    "copyright": "© 2026 Code With Krishna",
+    "comments": "Offline developer toolbox for Windows"
+  }
+}
